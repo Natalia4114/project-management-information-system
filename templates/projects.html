@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление проектами</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="header">
+        <h1>Управление проектами</h1>
+        <a href="/" style="color:white;">← На главную</a>
+    </header>
+
+    <main class="container">
+        <h2>Создать новый проект</h2>
+
+        {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endwith %}
+
+        <form method="POST" class="welcome">
+            <label>Название проекта:</label>
+            <input type="text" name="name" required>
+
+            <label>Описание:</label>
+            <textarea name="description"></textarea>
+
+            <label>Дата начала:</label>
+            <input type="date" name="start_date">
+
+            <label>Дата завершения:</label>
+            <input type="date" name="end_date">
+
+            <label>Статус:</label>
+            <select name="status">
+                <option>Планируется</option>
+                <option>В работе</option>
+                <option>Завершён</option>
+            </select>
+
+            <label>Руководитель проекта:</label>
+            <select name="manager_id">
+                <option value="">Не назначен</option>
+                {% for employee in employees %}
+                    <option value="{{ employee.id }}">
+                        {{ employee.full_name }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Создать проект</button>
+        </form>
+
+        <h2 style="margin-top:30px;">Список проектов</h2>
+
+        {% for project in projects %}
+            <div class="card" style="margin-bottom:15px;">
+                <h3>{{ project.name }}</h3>
+                <p>{{ project.description }}</p>
+                <p>Статус: {{ project.status }}</p>
+                <p>Начало: {{ project.start_date or "Не указано" }}</p>
+                <p>Завершение: {{ project.end_date or "Не указано" }}</p>
+                <p>Руководитель: {{ project.manager_name or "Не назначен" }}</p>
+                <a href="{{ url_for('edit_project', project_id=project.id) }}">
+    <button type="button">Редактировать</button>
+    <form method="POST"
+      action="{{ url_for('delete_project', project_id=project.id) }}"
+      onsubmit="return confirm('Удалить проект и все связанные с ним задачи?');">
+
+    <button type="submit">Удалить</button>
+</form>
+</a>
+            </div>
+        {% else %}
+            <p>Проектов пока нет.</p>
+        {% endfor %}
+    </main>
+</body>
+</html>

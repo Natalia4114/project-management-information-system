@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактирование сотрудника</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="header">
+        <h1>Редактирование сотрудника</h1>
+        <a href="/employees" style="color:white;">← К списку сотрудников</a>
+    </header>
+
+    <main class="container">
+        <form method="POST" class="welcome">
+            <label>ФИО:</label>
+            <input
+                type="text"
+                name="full_name"
+                value="{{ employee.full_name }}"
+                required
+            >
+
+            <label>Должность:</label>
+            <input
+                type="text"
+                name="position"
+                value="{{ employee.position }}"
+                required
+            >
+
+            <label>Email:</label>
+            <input
+                type="email"
+                name="email"
+                value="{{ employee.email or '' }}"
+            >
+
+            <button type="submit">Сохранить изменения</button>
+        </form>
+    </main>
+</body>
+</html>

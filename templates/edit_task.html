@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактирование задачи</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="header">
+        <h1>Редактирование задачи</h1>
+        <a href="/tasks" style="color:white;">← К списку задач</a>
+    </header>
+
+    <main class="container">
+        <form method="POST" class="welcome">
+            <label>Название задачи:</label>
+            <input type="text" name="title" value="{{ task.title }}" required>
+
+            <label>Описание:</label>
+            <textarea name="description">{{ task.description or "" }}</textarea>
+
+            <label>Проект:</label>
+            <select name="project_id" required>
+                {% for project in projects %}
+                    <option value="{{ project.id }}"
+                        {% if project.id == task.project_id %}selected{% endif %}>
+                        {{ project.name }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <label>Срок выполнения:</label>
+            <input type="date" name="deadline" value="{{ task.deadline or '' }}">
+
+            <label>Приоритет:</label>
+            <select name="priority">
+                {% for priority in ["Низкий", "Средний", "Высокий"] %}
+                    <option value="{{ priority }}"
+                        {% if priority == task.priority %}selected{% endif %}>
+                        {{ priority }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <label>Статус:</label>
+            <select name="status">
+                {% for status in ["Новая", "В работе", "Завершена"] %}
+                    <option value="{{ status }}"
+                        {% if status == task.status %}selected{% endif %}>
+                        {{ status }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <label>Исполнители:</label>
+            <select name="employee_ids" multiple size="5">
+                {% for employee in employees %}
+                    <option value="{{ employee.id }}"
+                        {% if employee.id in assigned_ids %}selected{% endif %}>
+                        {{ employee.full_name }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <small>Для выбора нескольких сотрудников удерживай Ctrl.</small>
+
+            <button type="submit">Сохранить изменения</button>
+        </form>
+    </main>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Сотрудники</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="header">
+        <h1>Сотрудники компании</h1>
+        <a href="/" style="color:white;">← На главную</a>
+    </header>
+
+    <main class="container">
+        <h2>Добавить сотрудника</h2>
+
+        {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endwith %}
+
+        <form method="POST" class="welcome">
+            <label>ФИО:</label>
+            <input type="text" name="full_name" required>
+
+            <label>Должность:</label>
+            <input type="text" name="position" required>
+
+            <label>Email:</label>
+            <input type="email" name="email">
+
+            <button type="submit">Добавить сотрудника</button>
+        </form>
+
+        <h2 style="margin-top:30px;">Список сотрудников</h2>
+
+        {% for employee in employees %}
+            <div class="card" style="margin-bottom:15px;">
+                <h3>{{ employee.full_name }}</h3>
+                <p>{{ employee.position }}</p>
+                <p>{{ employee.email or "Email не указан" }}</p>
+                <a href="{{ url_for('edit_employee', employee_id=employee.id) }}">
+    <button type="button">Редактировать</button>
+    <form method="POST"
+      action="{{ url_for('delete_employee', employee_id=employee.id) }}"
+      onsubmit="return confirm('Вы действительно хотите удалить этого сотрудника?');">
+
+    <button type="submit">Удалить</button>
+</form>
+</a>
+            </div>
+        {% else %}
+            <p>Сотрудников пока нет.</p>
+        {% endfor %}
+    </main>
+</body>
+</html>

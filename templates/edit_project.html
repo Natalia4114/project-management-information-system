@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактирование проекта</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="header">
+        <h1>Редактирование проекта</h1>
+        <a href="/projects" style="color:white;">← К списку проектов</a>
+    </header>
+
+    <main class="container">
+        <form method="POST" class="welcome">
+            <label>Название проекта:</label>
+            <input type="text" name="name"
+                   value="{{ project.name }}" required>
+
+            <label>Описание:</label>
+            <textarea name="description">{{ project.description or "" }}</textarea>
+
+            <label>Дата начала:</label>
+            <input type="date" name="start_date"
+                   value="{{ project.start_date or '' }}">
+
+            <label>Дата завершения:</label>
+            <input type="date" name="end_date"
+                   value="{{ project.end_date or '' }}">
+
+            <label>Статус:</label>
+            <select name="status">
+                {% for status in ["Планируется", "В работе", "Завершён"] %}
+                    <option value="{{ status }}"
+                        {% if status == project.status %}selected{% endif %}>
+                        {{ status }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <label>Руководитель проекта:</label>
+            <select name="manager_id">
+                <option value="">Не назначен</option>
+                {% for employee in employees %}
+                    <option value="{{ employee.id }}"
+                        {% if employee.id == project.manager_id %}selected{% endif %}>
+                        {{ employee.full_name }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Сохранить изменения</button>
+        </form>
+    </main>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление задачами</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="header">
+        <h1>Управление задачами</h1>
+        <a href="/" style="color:white;">← На главную</a>
+    </header>
+
+    <main class="container">
+        <h2>Создать новую задачу</h2>
+
+        {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endwith %}
+
+        {% if projects %}
+        <form method="POST" class="welcome">
+            <label>Название задачи:</label>
+            <input type="text" name="title" required>
+
+            <label>Описание:</label>
+            <textarea name="description"></textarea>
+
+            <label>Проект:</label>
+            <select name="project_id" required>
+                {% for project in projects %}
+                    <option value="{{ project.id }}">
+                        {{ project.name }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <label>Срок выполнения:</label>
+            <input type="date" name="deadline">
+
+            <label>Приоритет:</label>
+            <select name="priority">
+                <option>Низкий</option>
+                <option selected>Средний</option>
+                <option>Высокий</option>
+            </select>
+
+            <label>Статус:</label>
+            <select name="status">
+                <option>Новая</option>
+                <option>В работе</option>
+                <option>Завершена</option>
+            </select>
+
+            <label>Исполнители:</label>
+            <select name="employee_ids" multiple size="4">
+                {% for employee in employees %}
+                    <option value="{{ employee.id }}">
+                        {{ employee.full_name }}
+                    </option>
+                {% endfor %}
+            </select>
+            <small>Для выбора нескольких сотрудников удерживай Ctrl.</small>
+
+            <button type="submit">Создать задачу</button>
+        </form>
+        {% else %}
+            <p>Сначала необходимо создать хотя бы один проект.</p>
+        {% endif %}
+
+        <h2 style="margin-top:30px;">Список задач</h2>
+
+        {% for task in tasks %}
+            <div class="card" style="margin-bottom:15px;">
+                <h3>{{ task.title }}</h3>
+                <p>Проект: {{ task.project_name }}</p>
+                <p>{{ task.description }}</p>
+                <p>Срок: {{ task.deadline or "Не указан" }}</p>
+                <p>Приоритет: {{ task.priority }}</p>
+                <p>Статус: {{ task.status }}</p>
+                <p>Исполнители: {{ task.workers or "Не назначены" }}</p>
+                <a href="{{ url_for('edit_task', task_id=task.id) }}">
+    <button type="button">Редактировать</button>
+    <form method="POST"
+      action="{{ url_for('delete_task', task_id=task.id) }}"
+      onsubmit="return confirm('Вы действительно хотите удалить эту задачу?');">
+
+    <button type="submit">Удалить</button>
+</form>
+</a>
+            </div>
+        {% else %}
+            <p>Задач пока нет.</p>
+        {% endfor %}
+    </main>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление проектами компании</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="header">
+        <h1>Project Management System</h1>
+        <p>Информационная система управления проектами компании</p>
+    </header>
+
+    <main class="container">
+        <h2>Панель управления</h2>
+        <p><a href="/employees">Управление сотрудниками</a></p>
+        <p><a href="/projects">Управление проектами</a></p>
+        <p><a href="/tasks">Управление задачами</a></p>
+
+        <section class="dashboard">
+            <div class="card">
+                <h3>Проекты</h3>
+                <p>{{ projects_count }}</p>
+            </div>
+
+            <div class="card">
+                <h3>Задачи</h3>
+                <p>{{ tasks_count }}</p>
+            </div>
+
+            <div class="card">
+                <h3>Сотрудники</h3>
+                <p>{{ employees_count }}</p>
+            </div>
+
+            <div class="card">
+                <h3>Задачи в работе</h3>
+                <p>{{ active_tasks }}</p>
+            </div>
+        </section>
+
+        <section class="welcome">
+            <h2>Добро пожаловать!</h2>
+            <p>Система предназначена для планирования проектов,
+            распределения задач и контроля работы сотрудников.</p>
+        </section>
+    </main>
+</body>
+</html>
